@@ -1,1 +1,3 @@
-include src/lze-contract-mapper/ressources/*
+include src/lze-contract-mapper/resources/*.png
+include src/lze-contract-mapper/resources/RS_contracts/*.png
+include src/lze-contract-mapper/resources/CT_contracts/*.png

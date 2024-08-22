@@ -1,25 +1,34 @@
 import sys
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QPalette, QColor
 
-from .lzecm import LZECM
-from .parser import ArgParser
+from .main_window import MainWindow
 
 def main(sys_args):
-	parser = ArgParser()
-	
-	parser.prog = "lze-contract-mapper"
-	
-	args = None
+	App = QApplication(sys.argv)
 
-	try:
-		args = parser.parse_args(sys_args)
-	except ValueError:
-		return 1
+	App.setStyle("Fusion")
 
-	lzecm_main = LZECM()
+	palette = QPalette()
+	palette.setColor(QPalette.Window, QColor(53, 53, 53))
+	palette.setColor(QPalette.WindowText, Qt.white)
+	palette.setColor(QPalette.Base, QColor(25, 25, 25))
+	palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+	palette.setColor(QPalette.ToolTipBase, Qt.black)
+	palette.setColor(QPalette.ToolTipText, Qt.white)
+	palette.setColor(QPalette.Text, Qt.white)
+	palette.setColor(QPalette.Button, QColor(53, 53, 53))
+	palette.setColor(QPalette.ButtonText, Qt.white)
+	palette.setColor(QPalette.BrightText, Qt.red)
+	palette.setColor(QPalette.Link, QColor(42, 130, 218))
+	palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+	palette.setColor(QPalette.HighlightedText, Qt.black)
+	App.setPalette(palette)
 
-	lzecm_main.run()
+	window = MainWindow()
 
-	return 0
+	return App.exec()
 
 def run():
 	return main(sys.argv[1:])
