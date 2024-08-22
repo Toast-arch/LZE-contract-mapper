@@ -2,12 +2,13 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel
 from PyQt5.QtGui import QPixmap
 import os
 
-from .statics import LZCM_RESOURCE_PATH, RS_CONTRACT_LIST
+from .statics import LZEMap
+from .statics import LZCM_RESOURCE_PATH
 
 class ContractCheckBox(QWidget):
-    def __init__(self, parent = None, contract_name = None, image_path = None, toggled_checkbox_connect = None):
+    def __init__(self, parent, contract_name: str, image_path: str, toggled_checkbox_connect):
         super().__init__(parent)
-
+        
         self.main_box = QHBoxLayout(self)
         self.main_box.setContentsMargins(0, 0, 0, 0)
         self.main_box.setSpacing(0)
@@ -27,13 +28,15 @@ class ContractCheckBox(QWidget):
 
         self.setLayout(self.main_box)
 
-
 class ContractSelector(QWidget):
-    def __init__(self, parent=None, toggled_checkbox_connect = None):
-        super(ContractSelector, self).__init__()
+    def __init__(self, parent, selected_map: LZEMap, toggled_checkbox_connect):
+        super(ContractSelector, self).__init__(parent)
 
         self.setFixedWidth(260)
 
+        self.selected_map = selected_map
+        self.toggled_checkbox_connect = toggled_checkbox_connect
+        
         self.main_box = QHBoxLayout(self)
         self.main_box.setContentsMargins(0, 0, 0, 0)
         self.main_box.setSpacing(0)
@@ -42,15 +45,24 @@ class ContractSelector(QWidget):
 
         self.scroll = QScrollArea(self)
         
-        for contract in RS_CONTRACT_LIST:
-            btn = ContractCheckBox(self, contract.name, os.path.join(LZCM_RESOURCE_PATH, "RS_contracts", contract.image_name), toggled_checkbox_connect)
+        for contract in self.selected_map.contract_list:
+            btn = ContractCheckBox(self, contract.name, os.path.join(LZCM_RESOURCE_PATH, self.selected_map.contract_images_path, contract.image_name), self.toggled_checkbox_connect)
             self.button_vertical_box.addWidget(btn)
 
-        holder = QWidget()
-        holder.setLayout(self.button_vertical_box)
+        self.holder = QWidget()
+        self.holder.setLayout(self.button_vertical_box)
         
-        self.scroll.setWidget(holder)
+        self.scroll.setWidget(self.holder)
         
         self.main_box.addWidget(self.scroll)
         
         self.setLayout(self.main_box)
+    
+    def reset(self):
+        for i in reversed(range(self.button_vertical_box.count())): 
+            self.button_vertical_box.itemAt(i).widget().deleteLater()
+            self.button_vertical_box.itemAt(i).widget().setParent(None)
+        
+        for contract in self.selected_map.contract_list:
+            btn = ContractCheckBox(self, contract.name, os.path.join(LZCM_RESOURCE_PATH, self.selected_map.contract_images_path, contract.image_name), self.toggled_checkbox_connect)
+            self.button_vertical_box.addWidget(btn)
