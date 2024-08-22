@@ -1,3 +1,11 @@
+import os
+import lzcm
+
+LZCM_RESOURCE_PATH = os.path.join(lzcm.__file__[:-11], 'resources')
+
+LZCM_RS_L0_PATH = os.path.join(LZCM_RESOURCE_PATH, "RS_L0.png")
+LZCM_TMP_MAP_PATH = os.path.join(LZCM_RESOURCE_PATH, "tmp.png")
+
 SCALE_FACTOR = 1.25
 
 RS_CONTRACT_LIST = [

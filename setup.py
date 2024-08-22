@@ -1,12 +1,12 @@
 import setuptools
 
 setuptools.setup(
-    name="lze-contract-mapper",
+    name="LevelZero Contract Mapper",
     version="0.0.1",
     author="archi.ac",
-    author_email="",
+    author_email="dont@message.me",
     url="https://github.com/Toast-arch/LZE-contract-mapper",
-    packages=['lze-contract-mapper'],
+    packages=['lzcm'],
     package_dir={'': 'src'},
     include_package_data=True,
     classifiers=[

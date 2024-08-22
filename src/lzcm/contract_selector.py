@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QCheckBox, QLabel, QScrollArea
 from PyQt5.QtGui import QPixmap
+import os
 
-from .statics import RS_CONTRACT_LIST
+from .statics import LZCM_RESOURCE_PATH, RS_CONTRACT_LIST
 
 class ContractCheckBox(QWidget):
     def __init__(self, parent = None, contract_name = None, image_path = None, toggled_checkbox_connect = None):
@@ -42,7 +43,7 @@ class ContractSelector(QWidget):
         self.scroll = QScrollArea(self)
         
         for contract in RS_CONTRACT_LIST:
-            btn = ContractCheckBox(self, contract[0], "./src/lze-contract-mapper/resources/RS_contracts/" + contract[1], toggled_checkbox_connect)
+            btn = ContractCheckBox(self, contract[0], os.path.join(LZCM_RESOURCE_PATH, "RS_contracts", contract[1]), toggled_checkbox_connect)
             self.button_vertical_box.addWidget(btn)
 
         holder = QWidget()
