@@ -14,13 +14,21 @@ class Contract:
         self.image_name = image_name
         self.coordinates = coordinates
 
+class PointOfInterest:
+    def __init__(self, name: str, level: int, image_name: str, coordinate_list: list[tuple[int]]):
+        self.name = name
+        self.level = level
+        self.image_name = image_name
+        self.coordinate_list = coordinate_list
+
 class LZEMap:
-    def __init__(self, name: str, levels: int, image_name: str, contract_images_path, contract_list: list[Contract]):
+    def __init__(self, name: str, levels: int, image_name: str, contract_images_path, contract_list: list[Contract], poi_list: list[PointOfInterest]):
         self.name = name
         self.levels = levels
         self.image_paths = [os.path.join(LZCM_RESOURCE_PATH, "maps", image_name)] if levels == 1 else [os.path.join(LZCM_RESOURCE_PATH, "maps", "{}_L{}.png".format(image_name[:-4], i)) for i in range(levels)]
         self.contract_images_path = contract_images_path
         self.contract_list = contract_list
+        self.poi_list = poi_list
 
 RS_CONTRACT_LIST = [
     Contract('Art',                     1, 'RS_art.png',                        (100, 100)),
@@ -74,7 +82,21 @@ CT_CONTRACT_LIST = [
     Contract('Weapon Blueprint',        0, 'CT_weapon_blueprint.png',           (100,100))
 ]
 
+RS_POI_LIST = [
+    PointOfInterest('Free Extracts',    0, 'free_extract.png',                  [(100,100), (200,100), (300,100)]),
+    PointOfInterest('10kg Extract',     0, '10kg_extract.png',                  [(100,100)]),
+    PointOfInterest('Ice Pick Extract', 0, 'ice_pick_extract.png',              [(100,100)]),
+    PointOfInterest('Zip Line Extract', 0, 'zip_line_extract.png',              [(100,100)]),
+    PointOfInterest('Spawn Points',     0, 'spawn_point.png',                   [(100,100), (200,100), (300,100)]),
+    PointOfInterest('Yellow Card Room', 0, 'rs_yellow_card.png',                [(100,100)]),
+    PointOfInterest('Blue Card Room',   0, 'rs_blue_card.png',                  [(100,100)]),
+    PointOfInterest('Red Card Room',    0, 'rs_red_card.png',                   [(100,100)]),
+    PointOfInterest('Purple Card Room', 0, 'rs_purple_card.png',                [(100,100)]),
+]
+
+CT_POI_LIST = []
+
 MAP_LIST = [
-    LZEMap("Research Station", 2, "RS.png", "RS_contracts", RS_CONTRACT_LIST),
-    LZEMap("Caves of Turion", 1, "CT.png", "CT_contracts", CT_CONTRACT_LIST)
+    LZEMap("Research Station", 2, "RS.png", "RS_contracts", RS_CONTRACT_LIST, RS_POI_LIST),
+    LZEMap("Caves of Turion", 1, "CT.png", "CT_contracts", CT_CONTRACT_LIST, CT_POI_LIST)
 ]

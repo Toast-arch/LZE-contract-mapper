@@ -1,12 +1,6 @@
 import os
-from PyQt5.QtCore import *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget, QHBoxLayout
 from PIL import Image
-
-from PyQt5.QtWidgets import QWidget
-
 
 from .contract_selector import ContractSelector
 from .map_widget import MapWidget
