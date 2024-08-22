@@ -43,7 +43,7 @@ class ContractSelector(QWidget):
         self.scroll = QScrollArea(self)
         
         for contract in RS_CONTRACT_LIST:
-            btn = ContractCheckBox(self, contract[0], os.path.join(LZCM_RESOURCE_PATH, "RS_contracts", contract[1]), toggled_checkbox_connect)
+            btn = ContractCheckBox(self, contract.name, os.path.join(LZCM_RESOURCE_PATH, "RS_contracts", contract.image_name), toggled_checkbox_connect)
             self.button_vertical_box.addWidget(btn)
 
         holder = QWidget()

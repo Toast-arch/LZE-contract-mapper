@@ -9,11 +9,13 @@ from PyQt5.QtWidgets import QWidget
 
 from .contract_selector import ContractSelector
 from .photo_viewer import PhotoViewer
-from .statics import LZCM_RESOURCE_PATH, LZCM_RS_L0_PATH, LZCM_TMP_MAP_PATH
+from .statics import LZCM_RESOURCE_PATH, LZCM_RS_L0_PATH, LZCM_TMP_MAP_PATH, RS_CONTRACT_LIST
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        
+        self.contract_display_list = []
 
         self.setWindowTitle("Python")
         
@@ -24,9 +26,12 @@ class MainWindow(QWidget):
         
         self.contract_selection_bar = ContractSelector(self, self.contract_toggled)
         
-        self.map_viewer = PhotoViewer(self)
+        # initialize map & tmp map
+        base_map = Image.open(LZCM_RS_L0_PATH)        
+        base_map.save(LZCM_TMP_MAP_PATH)
         
-        self.init_map()
+        self.map_viewer = PhotoViewer(self)
+        self.map_viewer.setPhoto(QPixmap(LZCM_TMP_MAP_PATH))
 
         main_layout.addWidget(self.contract_selection_bar)
         main_layout.addWidget(self.map_viewer)
@@ -38,25 +43,26 @@ class MainWindow(QWidget):
 
         # show all the widgets
         self.show()
-
-    def contract_toggled(self, b):
-        print(f"{b.text()} {b.isChecked()}")
-        self.refresh_map([])
     
-    def init_map(self):
-        base_map = Image.open(LZCM_RS_L0_PATH)
+    def contract_toggled(self, b):        
+        if b.isChecked() and b not in self.contract_display_list:
+            for contract in RS_CONTRACT_LIST:
+                if b.text() == contract.name:
+                    self.contract_display_list.append(contract)
+                    break
+        else:
+            self.contract_display_list = [contract for contract in self.contract_display_list if contract.name != b.text()]
         
-        base_map.save(LZCM_TMP_MAP_PATH)
-        
-        self.map_viewer.setPhoto(QPixmap(LZCM_TMP_MAP_PATH))
+        self.refresh_map()
     
-    def refresh_map(self, contract_list: list):
-        base_map = Image.open(LZCM_RS_L0_PATH)
+    def refresh_map(self):
+        tmp_map = Image.open(LZCM_RS_L0_PATH)
 
-        contract_image = Image.open(os.path.join(LZCM_RESOURCE_PATH, "RS_contracts" , "RS_filter.png"))
+        for contract in self.contract_display_list:
+            contract_image = Image.open(os.path.join(LZCM_RESOURCE_PATH, "RS_contracts" , contract.image_name))
 
-        base_map.paste(contract_image, (100, 100), contract_image)
+            tmp_map.paste(contract_image, contract.coordinates, contract_image)
 
-        base_map.save(LZCM_TMP_MAP_PATH)
+        tmp_map.save(LZCM_TMP_MAP_PATH)
         
         self.map_viewer.setPhoto(QPixmap(LZCM_TMP_MAP_PATH))
